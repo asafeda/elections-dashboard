@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>מעברי קולות בין הבחירות</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="lib/papaparse.min.js"></script>
+  <script src="lib/echarts.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>מעברי קולות בין מערכות הבחירות</h1>
+    <div id="status" class="status">טוען נתונים…</div>
+  </header>
+
+  <nav class="tabs" id="sectorTabs">
+    <button data-sector="all" class="active">כל הישובים</button>
+    <button data-sector="general">כללי (ללא חרדים וערבים)</button>
+    <button data-sector="haredi">חרדי</button>
+    <button data-sector="arab">ערבי</button>
+  </nav>
+
+  <section class="controls">
+    <label>רמת ניתוח
+      <select id="level">
+        <option value="city">לפי ישוב</option>
+        <option value="kalpi">לפי קלפי</option>
+      </select>
+    </label>
+    <label id="bzbWrap" hidden>שינוי מקסימלי בבזב בין הבחירות: <b id="bzbVal"></b>
+      <input type="range" id="maxBzb" min="0.05" max="1" step="0.05" value="0.15">
+    </label>
+    <label>סף לסיווג חרדי/ערבי: <b id="cutoffVal"></b>
+      <input type="range" id="cutoff" min="0.3" max="0.95" step="0.05" value="0.5">
+    </label>
+    <label>אשכול חברתי-כלכלי
+      <select id="eshkol">
+        <option value="all">הכל</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" id="showAll"> הצג את כל המפלגות (גם מתחת לאחוז החסימה)</label>
+    <label class="check"><input type="checkbox" id="showNonVoters" checked> הצג "לא הצביעו" בתרשים הזרימה</label>
+  </section>
+
+  <div id="coverage" class="note"></div>
+
+  <section class="card">
+    <h2>זרימת קולות: בחירות קודמות ← בחירות נוכחיות</h2>
+    <p class="note">הערכה סטטיסטית (הסקה אקולוגית) על בסיס השוואת תוצאות בין יחידות (ישובים או קלפיות), לא מדידה של הצבעה אישית. שורות מסומנות ב-* מבוססות על מעט מצביעים בסינון הנוכחי ולכן פחות אמינות.</p>
+    <div id="sankey" class="chart tall"></div>
+  </section>
+
+  <section class="card">
+    <h2>מטריצת מעברים (%)</h2>
+    <div class="row">
+      <label>כיוון
+        <select id="direction">
+          <option value="from">לאן הלכו מצביעי כל מפלגה (שורה = 100%)</option>
+          <option value="to">מאיפה הגיעו מצביעי כל מפלגה (עמודה = 100%)</option>
+        </select>
+      </label>
+    </div>
+    <div id="heatmap" class="chart tall"></div>
+  </section>
+
+  <section class="card">
+    <h2>מפלגה בודדת</h2>
+    <div class="row">
+      <label>מצביעי <select id="pickOld"></select> בבחירות הקודמות הצביעו כעת:</label>
+      <label>מצביעי <select id="pickNew"></select> בבחירות הנוכחיות הגיעו מ:</label>
+    </div>
+    <div class="grid2">
+      <div id="partyFrom" class="chart"></div>
+      <div id="partyTo" class="chart"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>לפי אשכול חברתי-כלכלי (1 = הנמוך ביותר)</h2>
+    <p class="note" id="eshkolCoverage"></p>
+    <div class="grid2">
+      <div><h3>בחירות קודמות: התפלגות הקולות לפי אשכול</h3><div id="clusterOld" class="chart"></div></div>
+      <div><h3>בחירות נוכחיות: התפלגות הקולות לפי אשכול</h3><div id="clusterNew" class="chart"></div></div>
+    </div>
+    <h3>שינוי בנקודות אחוז (מפלגות עם אותה אות בשתי הבחירות)</h3>
+    <div id="clusterChange" class="chart"></div>
+    <h3>לאן הלכו מצביעי <select id="pickCluster"></select> בכל אשכול</h3>
+    <div id="clusterTransfer" class="chart"></div>
+  </section>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
